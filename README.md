@@ -6,3 +6,6 @@ Every file in the template folder, except for Test.lua, variables.lua.template a
 
 ## URL formatting
 The URL needs to be URL/URI encoded, otherwise the programm will fail because of an `Error 400 (Bad Request)`. Characters such as `ß` have to be encoded correctly. I recommend using an URL encoder such as [this one](https://fusionauth.io/learn/expert-advice/dev-tools/url-encoder-decoder).
+
+## OC screen size
+The layout is tested on 3x2 (wxh), so the text can be seen hanging in a height of 4 blocks (from ground: 3 blocks air, then first row screen blocks) without OptiFine or clicking on the screen.
