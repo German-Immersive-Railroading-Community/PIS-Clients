@@ -19,16 +19,17 @@ local vars =
 local function writeToScreen(net_adress, platform_lines)
     gpu.bind(net_adress)
     gpu.setResolution(25, 8,25)
+    --Next line (probably commented) is for debugging, to see the error message
     --gpu.setResolution(100, 50)
     gpu.setBackground(0x050cb5)
-    gpu.setForeground(0xffffff)
     term.clear()
     local j = 1
     local offset = 0
     for k, line in pairs(platform_lines) do
         if line.displayName == nil then break end
         -- Linienname, Abfahrt, Verspätung, Gleisverlegung, Ausfall
-        term.setCursor(0, 0+offset*2*j)
+        gpu.setForeground(0xffffff)
+        term.setCursor(1, 0+offset*2*j)
         term.write(line.displayName)
         gpu.setForeground(0x2e990b)
         term.write(" " .. line.departure)
@@ -36,9 +37,22 @@ local function writeToScreen(net_adress, platform_lines)
             gpu.setForeground(0x85094d)
             local delay = ""
             if tonumber(line.delay) > 0 then delay = "+" .. line.delay else delay = line.delay end
-            term.write(" " .. delay)
+            term.write(delay)
         end
-        if j == 4 then break end
+        for k, station in pairs(line.stations) do
+            -- This if below isn't working at all... Too bad
+            if station["station"]["name"] == vars.station_name then
+                term.setCursor(1, 0+offset*2*j+1)
+                if station.cancelled == "true" then
+                    gpu.setForeground(0x85094d)
+                    term.write("Dieser Zug entfällt!")
+                elseif station.changedPlatform ~= 0 then
+                    gpu.setForeground(0xffffff)
+                    term.write("Zug verkehrt an Bahnsteig " .. tostring(station.changedPlatform))
+                end
+            end
+        end
+        if j == 3 then break end
         j = j + 1
         offset = 1
     end
