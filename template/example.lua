@@ -1,3 +1,7 @@
+--This file is licensed under the Apache License 2.0
+--Copyright (c) GIRC 2022
+--For a documented version please look at the "template.lua" file
+
 local vars =
 {
     screen_table = {
@@ -7,8 +11,9 @@ local vars =
             "ca8e3ec7-55b6-4ab9-950f-688d9a30644c"
         }
     },
-    station_server_url = "http://hexenkessel.ddns.net:2020",
-    station_name = "Gro%C3%9Fpostwitz"
+    station_server_url = "girc.eu:1337",
+    station_name = "Gro%C3%9Fpostwitz",
+    refresh_time = 30
 }
 
 local gpu = require("component").gpu
@@ -55,7 +60,6 @@ local function writeToScreen(net_adress, platform_number, station_name)
             term.write(delay)
         end
         for k, station in pairs(line.stations) do
-            -- This if below isn't working at all... Too bad
             if station["station"]["name"] == station_name then
                 if y == 0 then term.setCursor(1, y+2) else term.setCursor(1, y+1) end
                 if station.cancelled == true then
@@ -78,17 +82,19 @@ gpu.setForeground(colors.white)
 Request_url = vars.station_server_url .. "/api/station/" .. vars.station_name
 local infos = makeRequest(Request_url)
 
--- Goes trough all the platforms the station has
-for i = 1, tonumber(infos["platforms"]), 1 do
-    local net_adress = vars["screen_table"][i]
-    --Checks if the platform has multiple screens
-    if type(net_adress) == "table" then
-        for key, subscreen_net_adress in pairs(net_adress) do
-            writeToScreen(subscreen_net_adress, i, infos.name)
+while true do
+    -- Goes trough all the platforms the station has
+    if infos == nil then error("No information for the station available") end
+    for i = 1, tonumber(infos["platforms"]), 1 do
+        local net_adress = vars["screen_table"][i]
+        --Checks if the platform has multiple screens
+        if type(net_adress) == "table" then
+            for key, subscreen_net_adress in pairs(net_adress) do
+                writeToScreen(subscreen_net_adress, i, infos.name)
+            end
+        else
+            writeToScreen(net_adress, i, infos.name)
         end
-    else
-        writeToScreen(net_adress, i, infos.name)
     end
+    os.sleep(vars.refresh_time)
 end
-
-os.exit()
