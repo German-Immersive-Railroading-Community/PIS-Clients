@@ -30,7 +30,7 @@ local vars =
             "04194aa6-cdc7-472f-81e3-e1aad756678b"
         },
     },
-    station_server_url = "http://hexenkessel.ddns.net:2020",
+    station_server_url = "http://girc.eu:1337",
     station_name = "Bad_Spencer",
     refresh_time = 30
 }
