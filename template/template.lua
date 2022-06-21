@@ -38,10 +38,12 @@ local internet = require "internet"
 local json = require "json"
 
 local colors = {
-    dark_blue = 0x050cb5,
     white = 0xffffff,
     dark_red = 0x85094d,
-    green = 0x2e990b
+    green = 0x2e990b,
+    blue = 0x0373fc,
+    black = 0x000000,
+    orange = 0xc28d11
 }
 
 --Makes a request and gives its body back as a json object
@@ -56,17 +58,20 @@ end
 local function writeToScreen(net_adress, platform_number, station_name)
     local platform_lines = makeRequest(Request_url .. "/lines/" .. tostring(platform_number))
     gpu.bind(net_adress)
-    gpu.setResolution(25, 8,25)
-    gpu.setBackground(colors.dark_blue)
+    gpu.setResolution(40, 8.5)
+    gpu.setBackground(colors.black)
     term.clear()
     local j = 1
     local offset = 0
+    gpu.setForeground(colors.white)
+    term.setCursor(1,2)
+    term.write("Folgende:")
     --Writes the lines to the current screen, max 3 because of 3*2+1=7 > no more room
     --since vertical resolution is 8,25 (see above)
     for k, line in pairs(platform_lines) do
         if line.displayName == nil then break end
         local y = 0+offset*2*j
-        gpu.setForeground(colors.white)
+        gpu.setForeground(colors.blue)
         term.setCursor(1, y)
         term.write(line.displayName)
         gpu.setForeground(colors.green)
@@ -85,7 +90,7 @@ local function writeToScreen(net_adress, platform_number, station_name)
                     gpu.setForeground(colors.dark_red)
                     term.write("Dieser Zug entfällt!")
                 elseif station.changedPlatform ~= 0 then
-                    gpu.setForeground(colors.white)
+                    gpu.setForeground(colors.orange)
                     term.write("Verkehrt Bahnsteig " .. tostring(station.changedPlatform))
                 end
             end
