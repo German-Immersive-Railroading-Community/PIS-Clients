@@ -14,7 +14,7 @@ local vars =
             "fb5dc77d-75fe-4c45-94e5-c0030d602da9"
         }
     },
-    station_server_url = "http://hexenkessel.ddns.net:2020",
+    station_server_url = "http://girc.eu:1337",
     station_name = "B%C3%A4rnbach",
     refresh_time = 30
 }
