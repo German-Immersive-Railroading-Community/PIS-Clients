@@ -7,7 +7,7 @@ local vars =
     screen_table = {
         {
             "bf04027b-60f8-454d-8b0d-61bf70fcffbe",
-            "bf04027b-60f8-454d-8b0d-61bf70fcffbe"
+            "5519b17f-f568-48ea-b6b4-39871631c374"
         },
         {
             "b2fecfe2-7d88-4374-8a40-870066eb8837",
